@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Punny</string>
+    <string name="favourites">Favourites</string>
+    <string name="create">Create</string>
+    <string name="creations">Creations</string>
+    <string name="helpDialogTitle">Help</string>
+    <string name="createYP">Create your own pun!</string>
+    <string name="createBtn">Create Pun</string>
+    <string name="editS">Enter Setup</string>
+    <string name="editP">Enter Punchline</string>
+    <string name="deleteF">Delete Saved Pun?</string>
+    <string name="deleteC">Delete Created Pun?</string>
+    <string name="helpMessage">To cycle through puns, simply swipe up and down! \n\nTo favourite a pun, press the favourite icon on the top-right corner!
+        \n\nTo share a pun, press the share icon on the top-right corner!\n\nFor help, press the help icon on the top-right corner!</string>
+    <string name="helpMessageFav">To cycle through puns, simply swipe up and down!
+        \n\nTo delete a pun, press the trash icon on the top-right corner!\n\nTo share a pun, press the share icon on the top-right corner!
+        \n\nFor help, press the help icon on the top-right corner!
+        \n\nThe delete and share icons would not be available if no puns are saved.</string>
+    <string name="helpMessageCreate">To cycle through puns, simply swipe up and down! \n\nTo favourite a created pun, press the favourite icon on the top-right corner!
+        \n\nTo edit a created pun, press the edit icon on the top-right corner!\n\nTo delete a created pun, press the trash icon on the top-right corner!
+        \n\nTo share a pun, press the share icon on the top-right corner! \n\nFor help, press the help icon on the top-right corner!\n\nThe favourite, delete and share icons would not be available if no puns are created.</string>
+    <string name="helpMessageCreatePun">The setup is the part of the pun that sets up the laugh. (Eg. What does a house wear?)
+        \n\nThe punchline is the part of the pun that makes you laugh. (Eg. Address.)</string>
+</resources>

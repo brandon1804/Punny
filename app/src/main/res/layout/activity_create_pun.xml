@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFB83D"
+    android:orientation="vertical"
+    tools:context=".CreatePun">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/createPunToolbar"
+        android:background="#FFFFFF"
+        app:title="@string/create"
+        app:titleTextColor="#FFB83D"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <TextView
+            android:id="@+id/createTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:gravity="center"
+            android:text="@string/createYP"
+            android:textColor="#FFFFFF"
+            android:textSize="25dp" />
+
+        <EditText
+            android:id="@+id/editSetup"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="50dp"
+            android:padding="10dp"
+            android:background="@drawable/textbox"
+            android:ems="10"
+            android:fontFamily="@font/pt_sans_bold"
+            android:hint="@string/editS"
+            android:inputType="textPersonName"
+            android:textColor="#FFB83D" />
+
+        <EditText
+            android:id="@+id/editPunchline"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/textbox"
+            android:ems="10"
+            android:hint="@string/editP"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textColor="#FFB83D" />
+
+        <Button
+            android:id="@+id/btnCreatePun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="@string/createBtn"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:menu="@menu/menu_navigation" />
+
+</LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editCPSetup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/textbox_focus"
+        android:ems="10"
+        android:fontFamily="@font/pt_sans_bold"
+        android:hint="@string/editS"
+        android:inputType="textPersonName"
+        android:textColor="#FFB83D" />
+
+    <EditText
+        android:id="@+id/editCPPunchline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/editP"
+        android:inputType="textPersonName"
+        android:textColor="#FFB83D"
+        android:backgroundTint="@color/textbox_focus"/>
+</LinearLayout>

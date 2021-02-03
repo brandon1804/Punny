@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/favCreation"
+        android:icon="@drawable/ic_baseline_favorite"
+        app:showAsAction = "always"
+        android:title="Favourite"/>
+    <item
+        android:id="@+id/editCreation"
+        android:icon="@drawable/ic_baseline_create"
+        app:showAsAction = "always"
+        android:title="Edit"/>
+    <item
+        android:id="@+id/deleteCreation"
+        android:icon="@drawable/ic_baseline_delete"
+        app:showAsAction = "always"
+        android:title="Delete"/>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_baseline_share"
+        app:showAsAction = "always"
+        android:title="Share"/>
+    <item
+        android:id="@+id/help"
+        android:icon="@drawable/ic_baseline_help"
+        app:showAsAction = "always"
+        android:title="Help"/>
+</menu>
