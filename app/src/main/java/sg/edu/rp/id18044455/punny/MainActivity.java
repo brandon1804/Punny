@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     TinyDB tinydb;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         favouritesList = tinydb.getListString("favouritesList");
         lastMAPosition  = tinydb.getInt("lastMAPosition");
 
-        viewPager = findViewById(R.id.viewPagerFavs);
+        viewPager = findViewById(R.id.viewPagerMA);
         ppAdapter = new ProvidedPunsAdapter(provider.getProvidedPuns(), provider.getColours());
         viewPager.setAdapter(ppAdapter);
         viewPager.setCurrentItem(lastMAPosition,false);
@@ -75,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (item.getItemId() == R.id.CreatePun){
                     startActivity(new Intent(MainActivity.this, CreatePun.class));
+                    overridePendingTransition(0,0);
+                    return true;
+                }
+                else if (item.getItemId() == R.id.Settings){
+                    startActivity(new Intent(MainActivity.this, Settings.class));
                     overridePendingTransition(0,0);
                     return true;
                 }

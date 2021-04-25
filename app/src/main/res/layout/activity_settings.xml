@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Settings">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/toolbar"
+        android:background="#FFFFFF"
+        app:title="@string/settings"
+        app:titleTextColor="#FFB83D"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFB83D"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:layout_marginBottom="20dp">
+
+
+            <TextView
+                android:id="@+id/tvChangeEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:drawableRight="@drawable/ic_baseline_navigate_next_24"
+                android:text="@string/ChangeEmail"
+                android:textColor="#FFB83D"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvChangePW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_baseline_navigate_next_24"
+                android:text="@string/ChangePW"
+                android:textColor="#FFB83D"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notification"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/snotification"
+                android:textColor="#FFB83D"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tvN"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:text="@string/notificationInfo"
+                    android:textColor="#818181"
+                    android:textSize="14sp"/>
+
+                <Switch
+                    android:id="@+id/nSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/TOD"
+                android:textColor="#FFB83D"
+                android:textSize="18sp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/etTOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/etTOD"
+                android:textColor="#818181"
+                android:textSize="18sp"
+                android:layout_marginBottom="15dp"/>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logoutbutton"
+            android:text="Log Out"
+            android:textColor="#FF5662" />
+
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:menu="@menu/menu_navigation" />
+</LinearLayout>

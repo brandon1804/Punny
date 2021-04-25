@@ -99,6 +99,11 @@ public class Favourites extends AppCompatActivity {
                     overridePendingTransition(0,0);
                     return true;
                 }
+                else if (item.getItemId() == R.id.Settings){
+                    startActivity(new Intent(Favourites.this, Settings.class));
+                    overridePendingTransition(0,0);
+                    return true;
+                }
                 return false;
             }
         });

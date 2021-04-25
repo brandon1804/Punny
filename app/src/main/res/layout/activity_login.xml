@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFB83D"
+    android:padding="10dp"
+    tools:context=".Login">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tvLogin"
+            android:textColor="#FFFFFF"
+            android:textSize="50sp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvEmail"
+                android:textColor="#FFB83D"
+                android:textSize="24sp"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="40dp"
+                android:padding="10dp"
+                android:background="@drawable/logintextbox"
+                android:ems="10"
+                android:fontFamily="@font/pt_sans_bold"
+                android:inputType="textEmailAddress"
+                android:textColor="#FFB83D"
+                android:text="testing@gmail.com"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvPW"
+                android:textColor="#FFB83D"
+                android:textSize="24sp"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/editPW"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp"
+                android:background="@drawable/logintextbox"
+                android:ems="10"
+                android:fontFamily="@font/pt_sans_bold"
+                android:inputType="textPassword"
+                android:textColor="#FFB83D"
+                android:text="123456"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginBottom="40dp">
+
+                <CheckBox
+                    android:id="@+id/rCheckbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tvRemember"
+                    android:textColor="#FFB83D"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvForgotPW"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/tvFPW"
+                    android:textColor="#FFB83D"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/signinbutton"
+                android:layout_marginBottom="20dp"
+                android:text="@string/tvLogin"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/tvNoAcc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/tvNoAcc"
+                android:textColor="#FFB83D"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>

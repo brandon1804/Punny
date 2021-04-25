@@ -1,19 +1,17 @@
 package sg.edu.rp.id18044455.punny;
 
-import android.graphics.Color;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+
 import java.util.Random;
 
 public class ProvidedPunsAdapter extends RecyclerView.Adapter<ProvidedPunsAdapter.ViewHolder> {

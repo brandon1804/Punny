@@ -16,4 +16,8 @@
         android:id="@+id/CreatePun"
         android:title="Create"
         android:icon="@drawable/ic_add_reaction_white_"/>
+    <item
+        android:id="@+id/Settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_baseline_settings_24"/>
 </menu>

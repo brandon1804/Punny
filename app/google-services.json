@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "279311312702",
+    "project_id": "punny-bd19e",
+    "storage_bucket": "punny-bd19e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279311312702:android:8c89fb6099d8f2bf0fae6f",
+        "android_client_info": {
+          "package_name": "sg.edu.rp.id18044455.punny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279311312702-23q8mdjqnfbg6gb1ta0pie5q8t0e9vg1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADDe7Fm7vuvOj5-yEj2fM9yOtRkX3L2LM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279311312702-23q8mdjqnfbg6gb1ta0pie5q8t0e9vg1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -95,6 +95,11 @@ public class Create extends AppCompatActivity {
 
                     return true;
                 }
+                else if (item.getItemId() == R.id.Settings){
+                    startActivity(new Intent(Create.this, Settings.class));
+                    overridePendingTransition(0,0);
+                    return true;
+                }
                 return false;
             }
         });

@@ -42,4 +42,11 @@ public class Providers {
     public int[] getColours() {
         return colours;
     }
+
+    public int getProvidedPunsLength(){
+        return providedPuns.length;
+    }
+
+
+
 }///end of class

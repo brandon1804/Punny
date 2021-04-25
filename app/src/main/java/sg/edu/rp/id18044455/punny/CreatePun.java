@@ -109,6 +109,11 @@ public class CreatePun extends AppCompatActivity {
                     overridePendingTransition(0,0);
                     return true;
                 }
+                else if (item.getItemId() == R.id.Settings){
+                    startActivity(new Intent(CreatePun.this, Settings.class));
+                    overridePendingTransition(0,0);
+                    return true;
+                }
                 return false;
             }
         });
