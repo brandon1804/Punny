@@ -51,8 +51,8 @@ public class Settings extends AppCompatActivity {
     FirebaseUser currUser;
 
 
-    String uEmail, nTime, isNChecked;
-    boolean nBoolean, rememberUser;
+    String nTime, isNChecked;
+    boolean nBoolean;
     int hod, mins;
 
 
@@ -338,8 +338,6 @@ public class Settings extends AppCompatActivity {
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                uEmail = snapshot.child("Email").getValue().toString();
-                rememberUser =  tinyDB.getBoolean(uEmail + "rememberUser");
                 if(snapshot.hasChild("NotificationTiming") && snapshot.hasChild("NotificationsEnabled") &&  snapshot.hasChild("hourOfDay") && snapshot.hasChild("minute")){
                     nTime = snapshot.child("NotificationTiming").getValue().toString();
                     isNChecked = snapshot.child("NotificationsEnabled").getValue().toString();
