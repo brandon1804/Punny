@@ -44,8 +44,7 @@
                 android:ems="10"
                 android:fontFamily="@font/pt_sans_bold"
                 android:inputType="textEmailAddress"
-                android:textColor="#FFB83D"
-                android:text="testing@gmail.com"/>
+                android:textColor="#FFB83D" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -65,8 +64,7 @@
                 android:ems="10"
                 android:fontFamily="@font/pt_sans_bold"
                 android:inputType="textPassword"
-                android:textColor="#FFB83D"
-                android:text="123456"/>
+                android:textColor="#FFB83D" />
 
 
             <LinearLayout

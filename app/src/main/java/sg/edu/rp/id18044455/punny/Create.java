@@ -198,6 +198,7 @@ public class Create extends AppCompatActivity {
                     else{
                         boolean isFav = false;
                         int favIndex = 0;
+                        boolean isCreated = false;
                         boolean isAdded = false;
                         boolean isPublished = false;
                         int punIndex = 0;
@@ -206,6 +207,13 @@ public class Create extends AppCompatActivity {
                             if (currentItemStr.equals(punsList.get(i))){
                                 isPublished = true;
                                 punIndex = i;
+                            }//end of if
+                        }//end of for loop
+
+
+                        for (int i = 0; i < createdPunsList.size(); i++){
+                            if (updatedPun.equals(createdPunsList.get(i))){
+                                isCreated = true;
                             }//end of if
                         }//end of for loop
 
@@ -222,8 +230,10 @@ public class Create extends AppCompatActivity {
                             }//end of if
                         }//end of for loop
 
+
+
                         if(isAdded == false){
-                            if(isPublished == true && isFav == true){
+                            if(isPublished == true && isCreated == false){
                                 punsList.set(punIndex, updatedPun);
                                 favouritesList.set(favIndex, updatedPun);
                                 createdPunsList.set(currentItem, updatedPun);
@@ -233,13 +243,24 @@ public class Create extends AppCompatActivity {
                                 tinydb.putListString(userID + "createdPunsList", createdPunsList);
                                 tinydb.putListString(userID + "favouritesList", favouritesList);
                             }
-                        }
+
+                            else if(isCreated == false){
+                                if(isFav == true){
+                                    favouritesList.set(favIndex, updatedPun);
+                                }
+                                createdPunsList.set(currentItem, updatedPun);
+                                Toast.makeText(Create.this, "Pun Updated!", Toast.LENGTH_SHORT).show();
+                                cpAdapter.notifyDataSetChanged();
+                                tinydb.putListString(userID + "createdPunsList", createdPunsList);
+                                tinydb.putListString(userID + "favouritesList", favouritesList);
+                            }
+                            else{
+                                Toast.makeText(Create.this, "Pun Already Created!", Toast.LENGTH_SHORT).show();
+                            }
+                        }//end of isAdded
                         else{
                             Toast.makeText(Create.this, "Pun Already Exists!", Toast.LENGTH_SHORT).show();
                         }
-
-
-
 
                     }//end of validation
                 }
@@ -284,10 +305,12 @@ public class Create extends AppCompatActivity {
                     }//end of for loop
 
 
-                    if (createdPunsList.size() == 1 && isFav == true && isPublished == true){
+                    if (createdPunsList.size() == 1 && isPublished == true){
                         punsList.remove(punIndex);
                         createdPunsList.remove(currentItem);
-                        favouritesList.remove(favIndex);
+                        if(isFav == true){
+                            favouritesList.remove(favIndex);
+                        }
                         root.child("Puns").setValue(punsList);
                         Toast.makeText(Create.this, "Pun Removed From Creations!", Toast.LENGTH_SHORT).show();
                         createdPunsList.add("You have not created any pun(s).");
@@ -299,11 +322,38 @@ public class Create extends AppCompatActivity {
                         tinydb.putListString(userID + "createdPunsList", createdPunsList);
                         tinydb.putListString(userID + "favouritesList", favouritesList);
                     }
-                    else if (createdPunsList.size() >= 2 && isFav == true && isPublished == true){
+                    else if (createdPunsList.size() >= 2 && isPublished == true){
                         punsList.remove(punIndex);
                         createdPunsList.remove(currentItem);
-                        favouritesList.remove(favIndex);
+                        if(isFav == true){
+                            favouritesList.remove(favIndex);
+                        }
                         root.child("Puns").setValue(punsList);
+                        Toast.makeText(Create.this, "Pun Removed From Creations!", Toast.LENGTH_SHORT).show();
+                        cpAdapter.notifyDataSetChanged();
+                        tinydb.putListString(userID + "createdPunsList", createdPunsList);
+                        tinydb.putListString(userID + "favouritesList", favouritesList);
+                    }
+                    else if (createdPunsList.size() == 1){
+                        createdPunsList.remove(currentItem);
+                        if(isFav == true){
+                            favouritesList.remove(favIndex);
+                        }
+                        Toast.makeText(Create.this, "Pun Removed From Creations!", Toast.LENGTH_SHORT).show();
+                        createdPunsList.add("You have not created any pun(s).");
+                        cpAdapter.notifyDataSetChanged();
+                        optionsMenu.findItem(R.id.publishCreation).setVisible(false);
+                        optionsMenu.findItem(R.id.deleteCreation).setVisible(false);
+                        optionsMenu.findItem(R.id.editCreation).setVisible(false);
+                        optionsMenu.findItem(R.id.share).setVisible(false);
+                        tinydb.putListString(userID + "createdPunsList", createdPunsList);
+                        tinydb.putListString(userID + "favouritesList", favouritesList);
+                    }
+                    else if (createdPunsList.size() >= 2){
+                        createdPunsList.remove(currentItem);
+                        if(isFav == true){
+                            favouritesList.remove(favIndex);
+                        }
                         Toast.makeText(Create.this, "Pun Removed From Creations!", Toast.LENGTH_SHORT).show();
                         cpAdapter.notifyDataSetChanged();
                         tinydb.putListString(userID + "createdPunsList", createdPunsList);
