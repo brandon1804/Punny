@@ -41,7 +41,7 @@ class NotificationHelper {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(mContext,
-                0 , intent,
+                0 /* Request code */, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
 
@@ -59,13 +59,17 @@ class NotificationHelper {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "NOTIFICATION_CHANNEL_NAME", importance);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             assert mNotificationManager != null;
             mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
             mNotificationManager.createNotificationChannel(notificationChannel);
         }//end of if
 
         assert mNotificationManager != null;
-        mNotificationManager.notify(0 , mBuilder.build());
+        mNotificationManager.notify(0 /* Request code */, mBuilder.build());
 
 
     }//end of createNotification

@@ -51,8 +51,8 @@ public class Settings extends AppCompatActivity {
     FirebaseUser currUser;
 
 
-    String nTime, isNChecked;
-    boolean nBoolean;
+    String uEmail, nTime, isNChecked;
+    boolean nBoolean, rememberUser;
     int hod, mins;
 
 
@@ -91,7 +91,7 @@ public class Settings extends AppCompatActivity {
                 final EditText etCPW = viewDialog.findViewById(R.id.etCPW);
 
                 AlertDialog.Builder myBuilder = new AlertDialog.Builder(Settings.this);
-                myBuilder.setTitle("Change Password");
+                myBuilder.setTitle("Change your Password?");
                 myBuilder.setView(viewDialog);
                 myBuilder.setCancelable(false);
 
@@ -118,7 +118,7 @@ public class Settings extends AppCompatActivity {
                     }
                 });
 
-                myBuilder.setNeutralButton("Cancel", null);
+                myBuilder.setNegativeButton("Cancel", null);
                 AlertDialog myDialog = myBuilder.create();
                 myDialog.show();
 
@@ -136,12 +136,10 @@ public class Settings extends AppCompatActivity {
                 View viewDialog = inflater.inflate(R.layout.change_email, null);
 
                 final EditText etSEmail = viewDialog.findViewById(R.id.etSEmail);
-
                 etSEmail.setText(currUser.getEmail());
 
-
                 AlertDialog.Builder myBuilder = new AlertDialog.Builder(Settings.this);
-                myBuilder.setTitle("Change Email");
+                myBuilder.setTitle("Change your Email?");
                 myBuilder.setView(viewDialog);
                 myBuilder.setCancelable(false);
 
@@ -168,7 +166,7 @@ public class Settings extends AppCompatActivity {
                     }
                 });
 
-                myBuilder.setNeutralButton("Cancel", null);
+                myBuilder.setNegativeButton("Cancel", null);
                 AlertDialog myDialog = myBuilder.create();
                 myDialog.show();
 
@@ -236,8 +234,9 @@ public class Settings extends AppCompatActivity {
                         calendar.set(Calendar.MINUTE, minute);
                         calendar.set(Calendar.SECOND, 0);
 
-                        if (calendar.getTime().compareTo(new Date()) < 0)
+                        if (calendar.getTime().compareTo(new Date()) < 0){
                             calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        }
 
                         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -247,8 +246,7 @@ public class Settings extends AppCompatActivity {
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                         }
 
-
-                        Toast.makeText(Settings.this, "Time Set" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Settings.this, "Time Set", Toast.LENGTH_SHORT).show();
                     }//end of onTimeSet
                 };
                 Calendar calendar = Calendar.getInstance();
@@ -275,18 +273,20 @@ public class Settings extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
                 builder.setTitle("Log out?");
                 builder.setMessage("This would log you out of Punny.");
+                builder.setCancelable(false);
 
-                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Log Out", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        tinyDB.putBoolean("rememberUser", false);
                         fAuth.signOut();
                         Intent intent = new Intent(Settings.this, Login.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        finish();
                     }
                 });//end of positive
 
-                builder.setNeutralButton("Cancel", null);
+                builder.setNegativeButton("Cancel", null);
                 AlertDialog myDialog = builder.create();
                 myDialog.show();
             }
@@ -326,10 +326,20 @@ public class Settings extends AppCompatActivity {
     }//end of onCreate
 
 
+    @Override
+    public void onBackPressed(){
+
+        moveTaskToBack(true);
+
+    }
+
+
     public void updateSettings(){
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                uEmail = snapshot.child("Email").getValue().toString();
+                rememberUser =  tinyDB.getBoolean(uEmail + "rememberUser");
                 if(snapshot.hasChild("NotificationTiming") && snapshot.hasChild("NotificationsEnabled") &&  snapshot.hasChild("hourOfDay") && snapshot.hasChild("minute")){
                     nTime = snapshot.child("NotificationTiming").getValue().toString();
                     isNChecked = snapshot.child("NotificationsEnabled").getValue().toString();

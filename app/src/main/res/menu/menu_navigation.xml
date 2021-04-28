@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_baseline_favorites"/>
     <item
         android:id="@+id/Creations"
-        android:title="Creations"
+        android:title="My Creations"
         android:icon="@drawable/ic_baseline_emoji_emotions"/>
     <item
         android:id="@+id/CreatePun"

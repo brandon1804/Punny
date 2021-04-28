@@ -14,10 +14,18 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -25,12 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     ArrayList<String> favouritesList;
+    ArrayList<String> punsList;
     Toolbar toolbar;
     ViewPager2 viewPager;
     Providers provider;
     ProvidedPunsAdapter ppAdapter;
     int lastMAPosition;
     TinyDB tinydb;
+    String userID;
+
+
+    FirebaseAuth fAuth;
+    DatabaseReference root;
+    FirebaseUser currUser;
 
 
     @Override
@@ -40,17 +55,19 @@ public class MainActivity extends AppCompatActivity {
 
         provider = new Providers();
 
+        fAuth = FirebaseAuth.getInstance();
+        currUser = fAuth.getCurrentUser();
+        root = FirebaseDatabase.getInstance().getReference();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        tinydb = new TinyDB(MainActivity.this);
-        favouritesList = tinydb.getListString("favouritesList");
-        lastMAPosition  = tinydb.getInt("lastMAPosition");
-
         viewPager = findViewById(R.id.viewPagerMA);
-        ppAdapter = new ProvidedPunsAdapter(provider.getProvidedPuns(), provider.getColours());
-        viewPager.setAdapter(ppAdapter);
-        viewPager.setCurrentItem(lastMAPosition,false);
+
+        tinydb = new TinyDB(MainActivity.this);
+        punsList = new ArrayList<String>();
+
+
+        updateUI();
 
 
         BottomNavigationView bottomNavBar = findViewById(R.id.bottom_nav);
@@ -60,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                tinydb.putInt("lastMAPosition", viewPager.getCurrentItem());
+                tinydb.putInt(userID + "lastMAPosition", viewPager.getCurrentItem());
                 if (item.getItemId() == R.id.Favourites){
                     Intent intent = new Intent(MainActivity.this, Favourites.class);
                     startActivity(intent);
@@ -87,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }//end of onCreate
+
+    @Override
+    public void onBackPressed(){
+
+        moveTaskToBack(true);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             else{
                 Toast.makeText(MainActivity.this, "Pun Already Saved!", Toast.LENGTH_SHORT).show();
             }
-            tinydb.putListString("favouritesList", favouritesList);
+            tinydb.putListString(userID + "favouritesList", favouritesList);
             return true;
         }//end of FavouritePun
 
@@ -144,6 +168,34 @@ public class MainActivity extends AppCompatActivity {
         }//end of SharePun
         return super.onOptionsItemSelected(item);
     }//end of onOptionsItemSelected
+
+
+    public void updateUI(){
+        root.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.child("Puns").getChildren()) {
+                    punsList.add(child.getValue().toString());
+                }//end of for loop
+
+                userID = snapshot.child("Users").child(currUser.getUid()).getValue().toString();
+                favouritesList = tinydb.getListString(userID + "favouritesList");
+                lastMAPosition  = tinydb.getInt(userID +"lastMAPosition");
+
+                ppAdapter = new ProvidedPunsAdapter(punsList, provider.getColours());
+                viewPager.setAdapter(ppAdapter);
+                viewPager.setCurrentItem(lastMAPosition,false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }//end of updateUI
+
 
 
 }//end of class

@@ -32,17 +32,10 @@ public class Login extends AppCompatActivity {
 
     TextView tvNoAcc, tvForgotPassword;
     EditText etEmail, etPassword;
-    CheckBox rCheckbox;
     Button btnSignIn;
 
     FirebaseAuth fAuth;
     FirebaseUser currUser;
-    DatabaseReference root;
-
-    TinyDB tinyDB;
-    boolean rememberUser;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +47,15 @@ public class Login extends AppCompatActivity {
         tvForgotPassword = findViewById(R.id.tvForgotPW);
         etEmail = findViewById(R.id.editEmail);
         etPassword = findViewById(R.id.editPW);
-        rCheckbox = findViewById(R.id.rCheckbox);
         btnSignIn = findViewById(R.id.btnSignIn);
 
         fAuth = FirebaseAuth.getInstance();
         currUser = fAuth.getCurrentUser();
 
-        tinyDB = new TinyDB(Login.this);
-        rememberUser = tinyDB.getBoolean("rememberUser");
-
-
-
-        if (rememberUser == true && currUser != null) {
+        if (currUser != null) {
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
 
@@ -96,7 +84,9 @@ public class Login extends AppCompatActivity {
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(Login.this, "Login Success", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(Login.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
+                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -108,20 +98,6 @@ public class Login extends AppCompatActivity {
 
             }
         }); //end of login
-
-
-        rCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    tinyDB.putBoolean("rememberUser", true);
-                }//end of if
-                else{
-                    tinyDB.putBoolean("rememberUser", false);
-                }
-            }
-        });//end of remember me
-
 
 
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +138,7 @@ public class Login extends AppCompatActivity {
                     }
                 });
 
-                myBuilder.setNeutralButton("Cancel", null);
+                myBuilder.setNegativeButton("Cancel", null);
                 AlertDialog myDialog = myBuilder.create();
                 myDialog.show();
             }
@@ -175,13 +151,13 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
+                finish();
             }
         });//end of register
 
 
 
     }//end of onCreate
-
 
 
 

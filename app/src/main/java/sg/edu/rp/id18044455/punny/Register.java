@@ -88,7 +88,9 @@ public class Register extends AppCompatActivity {
                             root.setValue(userMap);
                             Toast.makeText(Register.this, "Registration Success", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(Register.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
+                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -105,7 +107,9 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Register.this, Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         });//end of tvAcc
 

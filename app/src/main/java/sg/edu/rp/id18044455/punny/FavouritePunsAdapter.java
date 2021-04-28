@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class FavouritePunsAdapter extends RecyclerView.Adapter<FavouritePunsAdapter.ViewHolder> {

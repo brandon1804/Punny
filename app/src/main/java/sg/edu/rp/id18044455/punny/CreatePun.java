@@ -18,33 +18,49 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class CreatePun extends AppCompatActivity {
 
     Toolbar toolbarCreatePun;
-    ArrayList<String> createdPunsList;
+    ArrayList<String> punsList, favouritesList, createdPunsList;
     EditText editSetup;
     EditText editPunchline;
     Button btnCreatePun;
     TinyDB tinydb;
+    String userID;
+
+    FirebaseAuth fAuth;
+    DatabaseReference root;
+    FirebaseUser currUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_pun);
 
+        fAuth = FirebaseAuth.getInstance();
+        currUser = fAuth.getCurrentUser();
+        root = FirebaseDatabase.getInstance().getReference();
 
+        tinydb = new TinyDB(CreatePun.this);
+        punsList = new ArrayList<String>();
+        updateUI();
 
         toolbarCreatePun = findViewById(R.id.createPunToolbar);
         setSupportActionBar(toolbarCreatePun);
         editSetup = findViewById(R.id.editSetup);
         editPunchline = findViewById(R.id.editPunchline);
         btnCreatePun = findViewById(R.id.btnCreatePun);
-
-        tinydb = new TinyDB(CreatePun.this);
-        createdPunsList = tinydb.getListString("createdPunsList");
 
 
 
@@ -55,6 +71,7 @@ public class CreatePun extends AppCompatActivity {
                 String punchline = editPunchline.getText().toString();
                 String createdPun = setup + "\n\n" + punchline;
                 boolean isCreated = false;
+                boolean isFav = false;
                 if (setup.length() == 0  && punchline.length() == 0){
                     editSetup.setError("Please enter the setup");
                     editPunchline.setError("Please enter the punchline");
@@ -72,19 +89,29 @@ public class CreatePun extends AppCompatActivity {
                         }//end of if
                     }//end of for loop
 
-                    if (isCreated == false){
+                    for (int i = 0; i < favouritesList.size(); i++){
+                        if (createdPun.equals(favouritesList.get(i))){
+                            isFav = true;
+                        }//end of if
+                    }//end of for loop
+
+                    if (isCreated == false && isFav == false){
                         createdPunsList.add(createdPun);
+                        favouritesList.add(createdPun);
                         editSetup.setText("");
                         editPunchline.setText("");
                         Toast.makeText(CreatePun.this, "Pun Created!", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        Toast.makeText(CreatePun.this, "Pun Already Created!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreatePun.this, "Pun Already Exists!", Toast.LENGTH_SHORT).show();
                     }
-                    tinydb.putListString("createdPunsList", createdPunsList);
+                    tinydb.putListString(userID + "createdPunsList", createdPunsList);
+                    tinydb.putListString(userID + "favouritesList", favouritesList);
                 }//end of validation
             }
         });
+
+
 
         BottomNavigationView bottomNavBar = findViewById(R.id.bottom_nav);
 
@@ -122,6 +149,12 @@ public class CreatePun extends AppCompatActivity {
     }//end of onCreate
 
     @Override
+    public void onBackPressed(){
+        moveTaskToBack(true);
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_createpunmenu, menu);
         return true;
@@ -148,5 +181,34 @@ public class CreatePun extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }//end of onOptionsItemSelected
+
+
+
+    public void updateUI(){
+        root.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (punsList.size() == 0){
+                    for (DataSnapshot child : snapshot.child("Puns").getChildren()) {
+                        punsList.add(child.getValue().toString());
+                    }//end of for puns loop
+                }
+
+                userID = snapshot.child("Users").child(currUser.getUid()).getValue().toString();
+                createdPunsList = tinydb.getListString(userID + "createdPunsList");
+                favouritesList = tinydb.getListString(userID + "favouritesList");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }//end of updateUI
+
+
+
 
 }//end of class

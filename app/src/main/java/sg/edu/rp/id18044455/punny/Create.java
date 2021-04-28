@@ -20,56 +20,51 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class Create extends AppCompatActivity {
 
     Toolbar toolbarCreate;
-    ArrayList<String> favouritesList;
-    ArrayList<String> createdPunsList;
+    ArrayList<String> punsList, favouritesList, createdPunsList;
     ViewPager2 viewPagerCreatedPuns;
     Providers provider;
     CreatedPunsAdapter cpAdapter;
     int lastCPosition;
     TinyDB tinydb;
     Menu optionsMenu;
+    String userID;
+
+    FirebaseAuth fAuth;
+    DatabaseReference root;
+    FirebaseUser currUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
 
+        fAuth = FirebaseAuth.getInstance();
+        currUser = fAuth.getCurrentUser();
+        root = FirebaseDatabase.getInstance().getReference();
+
         tinydb = new TinyDB(Create.this);
+        punsList = new ArrayList<String>();
+
+        updateUI();
+
         toolbarCreate = findViewById(R.id.toolbarCreation);
         setSupportActionBar(toolbarCreate);
         provider = new Providers();
-        lastCPosition  = tinydb.getInt("lastCPosition");
-        favouritesList = tinydb.getListString("favouritesList");
-        createdPunsList = tinydb.getListString("createdPunsList");
         viewPagerCreatedPuns = findViewById(R.id.viewPagerCreations);
-
-        if (createdPunsList.size() == 0){
-            createdPunsList.add("You have not created any pun(s).");
-        }
-        else if (createdPunsList.size() >= 2){
-            boolean isE = false;
-            int position = 0;
-            for (int i = 0; i < createdPunsList.size(); i++){
-                if (createdPunsList.get(i).equals("You have not created any pun(s).")){
-                    isE = true;
-                    position = i;
-                }//end of if
-            }//end of for loop
-
-            if (isE == true){
-                createdPunsList.remove(position);
-            }
-        }
-        cpAdapter = new CreatedPunsAdapter(createdPunsList, provider.getColours());
-        viewPagerCreatedPuns.setAdapter(cpAdapter);
-        viewPagerCreatedPuns.setCurrentItem(lastCPosition,false);
-
 
         BottomNavigationView bottomNavBar = findViewById(R.id.bottom_nav);
 
@@ -78,7 +73,7 @@ public class Create extends AppCompatActivity {
         bottomNavBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                tinydb.putInt("lastCPosition", viewPagerCreatedPuns.getCurrentItem());
+                tinydb.putInt(userID + "lastCPosition", viewPagerCreatedPuns.getCurrentItem());
                 if (item.getItemId() == R.id.Home){
                     startActivity(new Intent(Create.this, MainActivity.class));
                     overridePendingTransition(0,0);
@@ -104,15 +99,25 @@ public class Create extends AppCompatActivity {
             }
         });
     }//end of onCreate
+
+    @Override
+    public void onBackPressed(){
+
+        moveTaskToBack(true);
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_createmenu, menu);
         if (createdPunsList.get(0).equals("You have not created any pun(s).")){
-            menu.findItem(R.id.favCreation).setVisible(false);
+            menu.findItem(R.id.publishCreation).setVisible(false);
             menu.findItem( R.id.editCreation).setVisible(false);
             menu.findItem( R.id.deleteCreation).setVisible(false);
             menu.findItem( R.id.share).setVisible(false);
         }
+
+
         optionsMenu = menu;
         return true;
     }
@@ -122,30 +127,46 @@ public class Create extends AppCompatActivity {
         // Handle action bar item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.favCreation) {
+        if (id == R.id.publishCreation) {
+            AlertDialog.Builder myBuilder = new AlertDialog.Builder(Create.this);
+            myBuilder.setTitle("Publish Pun?");
+            myBuilder.setMessage("Your pun would be visible to other users.");
+            myBuilder.setCancelable(false);
+
             int currentItem = viewPagerCreatedPuns.getCurrentItem();
             String currentItemStr = createdPunsList.get(currentItem);
-            boolean isAdded = false;
 
-            for (int i = 0; i < favouritesList.size(); i++){
-                if (currentItemStr.equals(favouritesList.get(i))){
-                    isAdded = true;
-                }//end of if
-            }//end of for loop
+            myBuilder.setPositiveButton("Publish", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    boolean isPublished = false;
 
-            if (isAdded == false){
-                favouritesList.add(currentItemStr);
-                Toast.makeText(Create.this, "Created Pun Saved!", Toast.LENGTH_SHORT).show();
-            }
-            else if (isAdded == true){
-                Toast.makeText(Create.this, "Created Pun Already Saved!", Toast.LENGTH_SHORT).show();
-            }
-            tinydb.putListString("favouritesList", favouritesList);
+                    for (int i = 0; i < punsList.size(); i++){
+                        if (currentItemStr.equals(punsList.get(i))){
+                            isPublished = true;
+                        }//end of if
+                    }//end of for loop
+
+                    if (isPublished == false){
+                        punsList.add(currentItemStr);
+                        root.child("Puns").setValue(punsList);
+                        Toast.makeText(Create.this, "Pun Published!", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (isPublished == true){
+                        Toast.makeText(Create.this, "Pun Already Published!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            myBuilder.setNegativeButton("Cancel", null);
+            AlertDialog myDialog = myBuilder.create();
+            myDialog.show();
             return true;
         }//end of FavouritePun
 
         else if (id == R.id.editCreation) {
             int currentItem = viewPagerCreatedPuns.getCurrentItem();
+            String currentItemStr = createdPunsList.get(currentItem);
 
             LayoutInflater inflater  = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View viewDialog = inflater.inflate(R.layout.edit_pun, null);
@@ -154,16 +175,16 @@ public class Create extends AppCompatActivity {
 
             AlertDialog.Builder myBuilder = new AlertDialog.Builder(Create.this);
             myBuilder.setView(viewDialog);
-            myBuilder.setTitle("Edit Created Pun");
+            myBuilder.setTitle("Edit Pun?");
             myBuilder.setCancelable(false);
 
-
-            myBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            myBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String setup = etSetup.getText().toString();
                     String punchline = etPunchline.getText().toString();
                     String updatedPun = setup + "\n\n" + punchline;
+
 
                     if (setup.length() == 0  && punchline.length() == 0){
                         Toast.makeText(Create.this, "Please ensure no text fields are empty!", Toast.LENGTH_SHORT).show();
@@ -175,51 +196,124 @@ public class Create extends AppCompatActivity {
                         Toast.makeText(Create.this, "Please enter the punchline!", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        createdPunsList.set(currentItem, updatedPun);
-                        Toast.makeText(Create.this, "Pun Updated!", Toast.LENGTH_SHORT).show();
-                        cpAdapter.notifyDataSetChanged();
-                        tinydb.putListString("createdPunsList", createdPunsList);
+                        boolean isFav = false;
+                        int favIndex = 0;
+                        boolean isAdded = false;
+                        boolean isPublished = false;
+                        int punIndex = 0;
+
+                        for (int i = 0; i < punsList.size(); i++){
+                            if (currentItemStr.equals(punsList.get(i))){
+                                isPublished = true;
+                                punIndex = i;
+                            }//end of if
+                        }//end of for loop
+
+                        for (int i = 0; i < favouritesList.size(); i++){
+                            if (createdPunsList.get(currentItem).equals(favouritesList.get(i))){
+                                isFav = true;
+                                favIndex = i;
+                            }//end of if
+                        }//end of for loop
+
+                        for (int i = 0; i < punsList.size(); i++){
+                            if (updatedPun.equals(punsList.get(i))){
+                                isAdded = true;
+                            }//end of if
+                        }//end of for loop
+
+                        if(isAdded == false){
+                            if(isPublished == true && isFav == true){
+                                punsList.set(punIndex, updatedPun);
+                                favouritesList.set(favIndex, updatedPun);
+                                createdPunsList.set(currentItem, updatedPun);
+                                root.child("Puns").setValue(punsList);
+                                Toast.makeText(Create.this, "Pun Updated!", Toast.LENGTH_SHORT).show();
+                                cpAdapter.notifyDataSetChanged();
+                                tinydb.putListString(userID + "createdPunsList", createdPunsList);
+                                tinydb.putListString(userID + "favouritesList", favouritesList);
+                            }
+                        }
+                        else{
+                            Toast.makeText(Create.this, "Pun Already Exists!", Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+
                     }//end of validation
                 }
             });
 
-            myBuilder.setNeutralButton("Cancel", null);
+            myBuilder.setNegativeButton("Cancel", null);
             AlertDialog myDialog = myBuilder.create();
             myDialog.show();
             return true;
         }//end of editPun
 
         else if (id == R.id.deleteCreation) {
-            int currentItem = viewPagerCreatedPuns.getCurrentItem();
             AlertDialog.Builder myBuilder = new AlertDialog.Builder(Create.this);
             myBuilder.setTitle("Delete Created Pun?");
-            myBuilder.setMessage("This would remove your created pun from our database.");
+            myBuilder.setMessage("This would remove your pun from our database.");
             myBuilder.setCancelable(false);
 
-            myBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            int currentItem = viewPagerCreatedPuns.getCurrentItem();
+            String currentItemStr = createdPunsList.get(currentItem);
+
+
+            myBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (createdPunsList.size() == 1){
+                    boolean isFav = false;
+                    int favIndex = 0;
+                    boolean isPublished = false;
+                    int punIndex = 0;
+
+                    for (int i = 0; i < punsList.size(); i++){
+                        if (currentItemStr.equals(punsList.get(i))){
+                            isPublished = true;
+                            punIndex = i;
+                        }//end of if
+                    }//end of for loop
+
+                    for (int i = 0; i < favouritesList.size(); i++){
+                        if (createdPunsList.get(currentItem).equals(favouritesList.get(i))){
+                            isFav = true;
+                            favIndex = i;
+                        }//end of if
+                    }//end of for loop
+
+
+                    if (createdPunsList.size() == 1 && isFav == true && isPublished == true){
+                        punsList.remove(punIndex);
                         createdPunsList.remove(currentItem);
+                        favouritesList.remove(favIndex);
+                        root.child("Puns").setValue(punsList);
                         Toast.makeText(Create.this, "Pun Removed From Creations!", Toast.LENGTH_SHORT).show();
                         createdPunsList.add("You have not created any pun(s).");
                         cpAdapter.notifyDataSetChanged();
+                        optionsMenu.findItem(R.id.publishCreation).setVisible(false);
                         optionsMenu.findItem(R.id.deleteCreation).setVisible(false);
                         optionsMenu.findItem(R.id.editCreation).setVisible(false);
                         optionsMenu.findItem(R.id.share).setVisible(false);
-                        optionsMenu.findItem(R.id.favCreation).setVisible(false);
-                        tinydb.putListString("createdPunsList", createdPunsList);
+                        tinydb.putListString(userID + "createdPunsList", createdPunsList);
+                        tinydb.putListString(userID + "favouritesList", favouritesList);
                     }
-                    else{
+                    else if (createdPunsList.size() >= 2 && isFav == true && isPublished == true){
+                        punsList.remove(punIndex);
                         createdPunsList.remove(currentItem);
+                        favouritesList.remove(favIndex);
+                        root.child("Puns").setValue(punsList);
                         Toast.makeText(Create.this, "Pun Removed From Creations!", Toast.LENGTH_SHORT).show();
                         cpAdapter.notifyDataSetChanged();
-                        tinydb.putListString("createdPunsList", createdPunsList);
+                        tinydb.putListString(userID + "createdPunsList", createdPunsList);
+                        tinydb.putListString(userID + "favouritesList", favouritesList);
                     }
+
                 }
             });
 
-            myBuilder.setNeutralButton("Cancel", null);
+            myBuilder.setNegativeButton("Cancel", null);
             AlertDialog myDialog = myBuilder.create();
             myDialog.show();
             return true;
@@ -249,6 +343,58 @@ public class Create extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }//end of onOptionsItemSelected
+
+
+    public void updateUI(){
+
+        root.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (punsList.size() == 0) {
+                    for (DataSnapshot child : snapshot.child("Puns").getChildren()) {
+                        punsList.add(child.getValue().toString());
+                    }//end of for puns loop
+                }
+
+                userID = snapshot.child("Users").child(currUser.getUid()).getValue().toString();
+                lastCPosition  = tinydb.getInt(userID + "lastCPosition");
+                favouritesList = tinydb.getListString(userID +"favouritesList");
+                createdPunsList = tinydb.getListString(userID +"createdPunsList");
+
+                if (createdPunsList.size() == 0){
+                    createdPunsList.add("You have not created any pun(s).");
+                }
+                else if (createdPunsList.size() >= 2){
+                    boolean isE = false;
+                    int position = 0;
+                    for (int i = 0; i < createdPunsList.size(); i++){
+                        if (createdPunsList.get(i).equals("You have not created any pun(s).")){
+                            isE = true;
+                            position = i;
+                        }//end of if
+                    }//end of for loop
+
+                    if (isE == true){
+                        createdPunsList.remove(position);
+                    }
+                }
+                cpAdapter = new CreatedPunsAdapter(createdPunsList, provider.getColours());
+                viewPagerCreatedPuns.setAdapter(cpAdapter);
+                viewPagerCreatedPuns.setCurrentItem(lastCPosition,false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }//end of updateUI
+
+
+
+
 
 
 }//end of class
