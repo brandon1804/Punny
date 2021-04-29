@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
         else if (id == R.id.share) {
             int currentItem = viewPager.getCurrentItem();
-            String currentItemStr = provider.getProvidedPuns()[currentItem];
+            String currentItemStr = punsList.get(currentItem);
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Pun", currentItemStr);
             clipboard.setPrimaryClip(clip);
