@@ -235,7 +235,9 @@ public class Create extends AppCompatActivity {
                         if(isAdded == false){
                             if(isPublished == true && isCreated == false){
                                 punsList.set(punIndex, updatedPun);
-                                favouritesList.set(favIndex, updatedPun);
+                                if(isFav == true){
+                                    favouritesList.set(favIndex, updatedPun);
+                                }
                                 createdPunsList.set(currentItem, updatedPun);
                                 root.child("Puns").setValue(punsList);
                                 Toast.makeText(Create.this, "Pun Updated!", Toast.LENGTH_SHORT).show();
