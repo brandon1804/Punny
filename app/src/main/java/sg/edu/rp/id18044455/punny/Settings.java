@@ -95,7 +95,7 @@ public class Settings extends AppCompatActivity {
                 myBuilder.setView(viewDialog);
                 myBuilder.setCancelable(false);
 
-                myBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                myBuilder.setPositiveButton("Update Password", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String newPassword = etCPW.getText().toString();
@@ -143,7 +143,7 @@ public class Settings extends AppCompatActivity {
                 myBuilder.setView(viewDialog);
                 myBuilder.setCancelable(false);
 
-                myBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                myBuilder.setPositiveButton("Update Email", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String newEmail = etSEmail.getText().toString();
@@ -222,9 +222,7 @@ public class Settings extends AppCompatActivity {
                             min = String.valueOf(minutes);
                         }
 
-
                         etTOD.setText(hour + ":" + min + " " + amPM);
-
                         root.child("NotificationTiming").setValue(etTOD.getText().toString());
                         root.child("hourOfDay").setValue(hourOfDay);
                         root.child("minute").setValue(minute);

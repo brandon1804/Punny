@@ -45,5 +45,5 @@
         \n\nTo edit a created pun, press the edit icon on the top-right corner!\n\nTo delete a created pun, press the trash icon on the top-right corner!
         \n\nTo share a pun, press the share icon on the top-right corner! \n\nFor help, press the help icon on the top-right corner!\n\nOnly the help icon would be available if no puns are created.</string>
     <string name="helpMessageCreatePun">The setup is the part of the pun that sets up the laugh. (Eg. What does a house wear?)
-        \n\nThe punchline is the part of the pun that makes you laugh. (Eg. Address.)\n\nPressing Create Pun would store your pun inside our database for your own use.\n\nPressing Create and Publish Pun would store your pun inside our database and your pun will be displayed inside the app for other users to use as well.</string>
+        \n\nThe punchline is the part of the pun that makes you laugh. (Eg. Address.)\n\nPressing Create Pun would store your pun in both your Favourites and Creations.</string>
 </resources>

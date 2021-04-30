@@ -162,7 +162,7 @@ public class Create extends AppCompatActivity {
             AlertDialog myDialog = myBuilder.create();
             myDialog.show();
             return true;
-        }//end of FavouritePun
+        }//end of publish
 
         else if (id == R.id.editCreation) {
             int currentItem = viewPagerCreatedPuns.getCurrentItem();
@@ -210,7 +210,6 @@ public class Create extends AppCompatActivity {
                             }//end of if
                         }//end of for loop
 
-
                         for (int i = 0; i < createdPunsList.size(); i++){
                             if (updatedPun.equals(createdPunsList.get(i))){
                                 isCreated = true;
@@ -229,7 +228,6 @@ public class Create extends AppCompatActivity {
                                 isAdded = true;
                             }//end of if
                         }//end of for loop
-
 
 
                         if(isAdded == false){
@@ -391,7 +389,7 @@ public class Create extends AppCompatActivity {
             AlertDialog myDialog = myBuilder.create();
             myDialog.show();
             return true;
-        }//end of SharePun
+        }//end of help
 
         return super.onOptionsItemSelected(item);
     }//end of onOptionsItemSelected

@@ -177,7 +177,7 @@ public class CreatePun extends AppCompatActivity {
             myDialog.show();
 
             return true;
-        }//end of SharePun
+        }//end of help
 
         return super.onOptionsItemSelected(item);
     }//end of onOptionsItemSelected

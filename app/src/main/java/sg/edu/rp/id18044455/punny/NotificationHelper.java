@@ -69,7 +69,7 @@ class NotificationHelper {
         }//end of if
 
         assert mNotificationManager != null;
-        mNotificationManager.notify(0 /* Request code */, mBuilder.build());
+        mNotificationManager.notify(0, mBuilder.build());
 
 
     }//end of createNotification

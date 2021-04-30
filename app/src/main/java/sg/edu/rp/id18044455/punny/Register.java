@@ -53,7 +53,6 @@ public class Register extends AppCompatActivity {
                 String password = etPWR.getText().toString();
                 String confirmPassword = etCPWR.getText().toString();
 
-
                 if(email.isEmpty() && password.isEmpty() && confirmPassword.isEmpty()){
                     etEmailR.setError("Email is required");
                     etPWR.setError("Password is required");

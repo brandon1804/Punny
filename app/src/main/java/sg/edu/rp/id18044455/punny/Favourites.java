@@ -182,7 +182,7 @@ public class Favourites extends AppCompatActivity {
             myDialog.show();
 
             return true;
-        }//end of SharePun
+        }//end of help
 
         return super.onOptionsItemSelected(item);
     }//end of onOptionsItemSelected
@@ -212,7 +212,7 @@ public class Favourites extends AppCompatActivity {
                     if (isE == true){
                         favouritesList.remove(position);
                     }
-                }
+                }//end of validation
 
                 fpAdapter = new FavouritePunsAdapter(favouritesList, provider.getColours());
                 viewPagerFavs.setAdapter(fpAdapter);
