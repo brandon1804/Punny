@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.fav) {
             int currentItem = viewPager.getCurrentItem();
-            String currentItemStr = provider.getProvidedPuns()[currentItem];
+            String currentItemStr = punsList.get(currentItem);
             boolean isAdded = false;
 
             for (int i = 0; i < favouritesList.size(); i++){
