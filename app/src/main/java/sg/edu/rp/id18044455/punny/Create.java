@@ -43,6 +43,7 @@ public class Create extends AppCompatActivity {
     Menu optionsMenu;
     String userID;
 
+
     FirebaseAuth fAuth;
     DatabaseReference root;
     FirebaseUser currUser;
@@ -150,6 +151,7 @@ public class Create extends AppCompatActivity {
                     if (isPublished == false){
                         punsList.add(currentItemStr);
                         root.child("Puns").setValue(punsList);
+                        tinydb.putString("punIdentifier" + currentItemStr, currUser.getUid());
                         Toast.makeText(Create.this, "Pun Published!", Toast.LENGTH_SHORT).show();
                     }
                     else if (isPublished == true){
@@ -167,7 +169,7 @@ public class Create extends AppCompatActivity {
         else if (id == R.id.editCreation) {
             int currentItem = viewPagerCreatedPuns.getCurrentItem();
             String currentItemStr = createdPunsList.get(currentItem);
-
+            String punIdentifier = tinydb.getString("punIdentifier" + currentItemStr);
             LayoutInflater inflater  = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View viewDialog = inflater.inflate(R.layout.edit_pun, null);
             final EditText etSetup = viewDialog.findViewById(R.id.editCPSetup);
@@ -230,14 +232,18 @@ public class Create extends AppCompatActivity {
                         }//end of for loop
 
 
+
+
+
                         if(isAdded == false){
-                            if(isPublished == true && isCreated == false){
+                            if(isPublished == true && isCreated == false && currUser.getUid().equals(punIdentifier)){
                                 punsList.set(punIndex, updatedPun);
                                 if(isFav == true){
                                     favouritesList.set(favIndex, updatedPun);
                                 }
                                 createdPunsList.set(currentItem, updatedPun);
                                 root.child("Puns").setValue(punsList);
+                                tinydb.putString("punIdentifier" + updatedPun, currUser.getUid());
                                 Toast.makeText(Create.this, "Pun Updated!", Toast.LENGTH_SHORT).show();
                                 cpAdapter.notifyDataSetChanged();
                                 tinydb.putListString(userID + "createdPunsList", createdPunsList);
@@ -280,6 +286,7 @@ public class Create extends AppCompatActivity {
 
             int currentItem = viewPagerCreatedPuns.getCurrentItem();
             String currentItemStr = createdPunsList.get(currentItem);
+            String punIdentifier = tinydb.getString("punIdentifier" + currentItemStr);
 
 
             myBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
@@ -305,7 +312,8 @@ public class Create extends AppCompatActivity {
                     }//end of for loop
 
 
-                    if (createdPunsList.size() == 1 && isPublished == true){
+
+                    if (createdPunsList.size() == 1 && isPublished == true && currUser.getUid().equals(punIdentifier)){
                         punsList.remove(punIndex);
                         createdPunsList.remove(currentItem);
                         if(isFav == true){
@@ -322,7 +330,7 @@ public class Create extends AppCompatActivity {
                         tinydb.putListString(userID + "createdPunsList", createdPunsList);
                         tinydb.putListString(userID + "favouritesList", favouritesList);
                     }
-                    else if (createdPunsList.size() >= 2 && isPublished == true){
+                    else if (createdPunsList.size() >= 2 && isPublished == true && currUser.getUid().equals(punIdentifier)){
                         punsList.remove(punIndex);
                         createdPunsList.remove(currentItem);
                         if(isFav == true){
